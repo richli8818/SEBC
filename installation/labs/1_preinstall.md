@@ -28,10 +28,15 @@ tmpfs            7685696      0   7685696   0% /dev/shm
 [root@ip-172-31-38-53 ~]# cat /etc/fstab
 
 LABEL=centos_root		/        ext4      defaults         0 0
+
 devpts     /dev/pts  devpts  gid=5,mode=620   0 0
+
 tmpfs      /dev/shm  tmpfs   defaults         0 0
+
 proc       /proc     proc    defaults         0 0
+
 sysfs      /sys      sysfs   defaults         0 0
+
 [root@ip-172-31-38-53 ~]# 
 
 3. Show the reserve space of any non-root, ext-based volumes
