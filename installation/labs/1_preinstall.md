@@ -94,6 +94,25 @@ ntp        995     1  0 01:34 ?        00:00:00 ntpd -u ntp:ntp -p /var/run/ntpd
 root      1132   943  0 02:01 pts/0    00:00:00 grep ntpd
 [root@ip-172-31-32-122 ~]# 
 
+MySQL installation - Plan Two Detail
+
+yum install wget
+
+wget http://repo.mysql.com/mysql-community-release5-5.noarch.rpm
+
+rpm -ivh mysql-community-release-el5-5.noarch.rpm
+
+### use the following commands (vi) to comment out all items under section [mysql57-community-dmr]
+
+vi /etc/yum.repos.d/mysql-community.repo 
+
+yum list all | grep -i mysql
+
+yum install mysql-community-server
+
+yum --skip-broken install mysql-community-server   ### if the above doesn't work or with errors.
+
+
 
 
 
