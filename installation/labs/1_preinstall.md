@@ -96,7 +96,7 @@ root      1132   943  0 02:01 pts/0    00:00:00 grep ntpd
 
 MySQL installation - Plan Two Detail
 
-yum install wget
+yum install wget        (install wget if not installed yet)
 
 wget http://repo.mysql.com/mysql-community-release-el5-5.noarch.rpm
 
@@ -117,6 +117,17 @@ yum --skip-broken install mysql-community-server   ### if the above doesn't work
 ## install MYSQL
 
 yum --skip-broken install mysql
+
+======== download JDBC Connector ===========
+
+wget https://dev.mysql.com/Downloads/mysql-connector-java-5.1.40.tar.gz
+
+tar -xvf mysql-connector-java-5.1.40.tar.gz
+
+add the following 2 lines in file "/etc/profile":
+# for JDBC Connector
+export CLASSPATH=/root/mysql-connector-java-5.1.40/mysql-connector-java-5.1.40-bin.jar:$CLASSPATH
+
 
 
 
