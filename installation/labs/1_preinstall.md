@@ -48,5 +48,15 @@ sysfs      /sys      sysfs   defaults         0 0
 4. Disable transparent hugepages
 
 
+5. list Inerface configuration:
+
+[root@ip-172-31-32-122 ~]# ip link show
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 16436 qdisc noqueue state UNKNOWN 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9001 qdisc pfifo_fast state UP qlen 1000
+    link/ether 06:df:46:51:8d:15 brd ff:ff:ff:ff:ff:ff
+    
+    
+    
 
 
