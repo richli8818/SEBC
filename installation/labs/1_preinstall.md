@@ -118,6 +118,20 @@ yum --skip-broken install mysql-community-server   ### if the above doesn't work
 
 yum --skip-broken install mysql
 
+======= the above "yum --skip-broken install" doesn't work, used the folling to correct the issue successfully ====
+
+yum remove  mysql-community-server
+
+yum remove mysql-community-release.noarch
+
+yum remove mysql-libs.x86_64
+
+yum install mysql-community-release-el5-5.noarch.rpm
+
+yum install mysql-community-server
+
+service mysqld start        ### works ok
+
 ======== download JDBC Connector ===========
 
 wget https://dev.mysql.com/Downloads/mysql-connector-java-5.1.40.tar.gz
