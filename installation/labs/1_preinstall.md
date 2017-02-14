@@ -98,7 +98,9 @@ MySQL installation - Plan Two Detail
 
 yum install wget
 
-wget http://repo.mysql.com/mysql-community-release5-5.noarch.rpm
+wget http://repo.mysql.com/mysql-community-release-el5-5.noarch.rpm
+
+### not this command: wget http://repo.mysql.com/mysql-community-release5-5.noarch.rpm
 
 rpm -ivh mysql-community-release-el5-5.noarch.rpm
 
@@ -111,6 +113,11 @@ yum list all | grep -i mysql
 yum install mysql-community-server
 
 yum --skip-broken install mysql-community-server   ### if the above doesn't work or with errors.
+
+## install MYSQL
+
+yum --skip-broken install mysql
+
 
 
 
