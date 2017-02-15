@@ -132,6 +132,9 @@ yum install mysql-community-server
 
 service mysqld start        ### works ok
 
+[root@ip-172-31-35-40 ~]# service mysqld status
+mysqld (pid  1094) is running...
+
 ======== download JDBC Connector ===========
 
 wget https://dev.mysql.com/Downloads/mysql-connector-java-5.1.40.tar.gz
@@ -141,6 +144,17 @@ tar -xvf mysql-connector-java-5.1.40.tar.gz
 add the following 2 lines in file "/etc/profile":
 # for JDBC Connector
 export CLASSPATH=/root/mysql-connector-java-5.1.40/mysql-connector-java-5.1.40-bin.jar:$CLASSPATH
+
+
+##### Use /usr/bin/mysql_secure_installation to:  [comment: the following items has already been configured / set by default] ##
+
+a. Set password protection for the server
+b. Revoke permissions for anonymous users
+c. Permit remote privileged login
+d. Remove test databases
+e. Refresh privileges in memory
+f. Refreshes the mysqld service
+
 
 
 
