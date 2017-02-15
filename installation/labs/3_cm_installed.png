@@ -2,12 +2,83 @@
 
 ***Path B install using Cloudera 5.8.3
 
+**** download and set the repo
+[root@ip-172-31-35-40 ~]# wget https://archive.cloudera.com/cm5/redhat/6/x86_64/cm/cloudera-manager.repo
 
-***** db.properties file content:
+[root@ip-172-31-35-40 ~]# wget https://archive.cloudera.com/cm5/cm/5/cloudera-manager-el6-cm5.8.3_x86_64.tar.gz
 
-create database scm DEFAULT CHARACTER SET utf8;
-grant all on scm.* TO 'scm'@'%' IDENTIFIED BY 'password';
+[root@ip-172-31-35-40 ~]# ls /etc/yum.repos.d/
+CentOS-Base.repo       CentOS-Media.repo  mysql-community-source.repo  mysql-community.repo.rpmsave
+CentOS-Debuginfo.repo  CentOS-Vault.repo  mysql-community.repo
+[root@ip-172-31-35-40 ~]# ls
+5.8.3                                    cm-5.8.3
+5.8.3.1                                  index.html
+cloudera                                 mysql-community-release-el5-5.noarch.rpm
+cloudera-manager-el6-cm5.8.3_x86_64.tar  mysql-connector-java-5.1.40
+cloudera-manager.repo                    mysql-connector-java-5.1.40.tar.gz
 
+[root@ip-172-31-35-40 ~]# cp -p cloudera-manager.repo /etc/yum.repos.d/
+[root@ip-172-31-35-40 ~]# yum install oracle-j2sdk1.7
+
+*** run the following yum to install cloudera manager, but it's version 5.10, so stopped it.
+[root@ip-172-31-35-40 ~]# yum install cloudera-manager-daemons cloudera-manager-server
+
+*** then modify repo file to specify version 5.8.3 as follows:
+[root@ip-172-31-35-40 cloudera-scm-server]# vim /etc/yum.repos.d/cloudera-manager.repo 
+
+[cloudera-manager]
+# Packages for Cloudera Manager, Version 5, on RedHat or CentOS 6 x86_64                  
+name=Cloudera Manager
+baseurl=https://archive.cloudera.com/cm5/redhat/6/x86_64/cm/5.8.3
+gpgcheck = 0
+
+*** then clean all and then to install the manager successfully.
+
+[root@ip-172-31-35-40 ~]# yum clean all
+[root@ip-172-31-35-40 ~]# yum install cloudera-manager-daemons cloudera-manager-server
+
+Installed:
+  cloudera-manager-daemons.x86_64 0:5.8.3-1.cm583.p0.8.el6 cloudera-manager-server.x86_64 0:5.8.3-1.cm583.p0.8.el6
+
+Complete!
+[root@ip-172-31-35-40 ~]# pwd
+/root
+[root@ip-172-31-35-40 ~]# ls
+5.8.3                                    cm-5.8.3
+5.8.3.1                                  index.html
+cloudera                                 mysql-community-release-el5-5.noarch.rpm
+cloudera-manager-el6-cm5.8.3_x86_64.tar  mysql-connector-java-5.1.40
+cloudera-manager.repo                    mysql-connector-java-5.1.40.tar.gz
+[root@ip-172-31-35-40 ~]# cd /usr/share/cmf/schema/
+[root@ip-172-31-35-40 schema]# ls
+mysql  oracle  postgresql  scm_database_functions.sh  scm_prepare_database.sh
+
+*** create scm database (name: scm, user=scm, password=password)
+mysql -u root -p
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| newdatabase        |
+| performance_schema |
++--------------------+
+4 rows in set (0.00 sec)
+
+mysql> create database scm default character set utf8;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> grant all on scm.* to 'scm'@'%' identified by 'password';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> exit
+
+
+
+***** modify db.properties file content: under directory "/etc/cloudera-scm-server/" ***
+#vim db.properties
 
 # The database type
 # Currently 'mysql', 'postgresql' and 'oracle' are valid databases.
@@ -26,10 +97,9 @@ com.cloudera.cmf.db.user=scm
 # The database user's password
 com.cloudera.cmf.db.password=password
 
-[root@ip-172-31-35-40 cloudera-scm-server]# 
-
 *** end of db.properties file content 
 
+*** JDBC was installed in previous lab, but the link are not in correct location, just create links in the right directories
 
 mkdir -p /usr/share/java/
 [root@ip-172-31-35-40 share]# pwd
@@ -41,10 +111,19 @@ mkdir -p /usr/share/java/
 [root@ip-172-31-35-40 share]# cd /usr/bin
 [root@ip-172-31-35-40 bin]# ln -s /usr/java/jdk1.7.0_67-cloudera/bin/java java
 
+*** the following CLASSPATH was added to /etc/profile previously
+# for JDBC Connector
+export CLASSPATH=/root/mysql-connector-java-5.1.40/mysql-connector-java-5.1.40-bin.jar
 
 *** start cloudera service
 service cloudera-scm-server start
 Starting cloudera-scm-server:                              [  OK  ]
+
+*** read logs if needed
+[root@ip-172-31-35-40 cloudera-scm-server]# cat /var/log/cloudera-scm-server/cloudera-scm-server.log
+
+*** verify if port 7180, 7182 are ready
+
 [root@ip-172-31-35-40 ~]# netstat -ntpl
 Active Internet connections (only servers)
 Proto Recv-Q Send-Q Local Address               Foreign Address             State       PID/Program name   
@@ -91,6 +170,9 @@ mysql> show databases
 +--------------------+
 11 rows in set (0.00 sec)
 
+*** now, finally, the clouder manager http service is up & running, ready to start brower to login to GUI interface
+
+http://http://ec2-52-38-140-117.us-west-2.compute.amazonaws.com:7180/
 
 
 
