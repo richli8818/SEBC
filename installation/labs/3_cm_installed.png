@@ -1,0 +1,59 @@
+***CM/CDH Install Lab
+
+***Path B install using Cloudera 5.8.3
+
+
+***** db.properties file content:
+
+create database scm DEFAULT CHARACTER SET utf8;
+grant all on scm.* TO 'scm'@'%' IDENTIFIED BY 'password';
+
+
+# The database type
+# Currently 'mysql', 'postgresql' and 'oracle' are valid databases.
+com.cloudera.cmf.db.type=mysql
+
+# The database host
+# If a non standard port is needed, use 'hostname:port'
+com.cloudera.cmf.db.host=ip-172-31-35-40
+
+# The database name
+com.cloudera.cmf.db.name=scm
+
+# The database user
+com.cloudera.cmf.db.user=scm
+
+# The database user's password
+com.cloudera.cmf.db.password=password
+
+[root@ip-172-31-35-40 cloudera-scm-server]# 
+
+*** end of db.properties file content 
+
+*** start cloudera service
+
+*** Create databases for the Activity Monitor, Reports Manager, Hive Metastore Server, Sentry Server, Cloudera Navigator Audit Server, and Cloudera Navigator Metadata Server:
+
+create database amon DEFAULT CHARACTER SET utf8;
+grant all on amon.* TO 'amon'@'%' IDENTIFIED BY 'amon_password';
+
+create database rman DEFAULT CHARACTER SET utf8;
+grant all on rman.* TO 'rman'@'%' IDENTIFIED BY 'rman_password';
+
+create database metastore DEFAULT CHARACTER SET utf8;
+grant all on metastore.* TO 'hive'@'%' IDENTIFIED BY 'hive_password';
+
+create database sentry DEFAULT CHARACTER SET utf8;
+grant all on sentry.* TO 'sentry'@'%' IDENTIFIED BY 'sentry_password';
+
+
+create database nav DEFAULT CHARACTER SET utf8;
+grant all on nav.* TO 'nav'@'%' IDENTIFIED BY 'nav_password';
+
+create database navms DEFAULT CHARACTER SET utf8;
+grant all on navms.* TO 'navms'@'%' IDENTIFIED BY 'navms_password';
+
+
+
+
+
