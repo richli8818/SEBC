@@ -30,7 +30,26 @@ com.cloudera.cmf.db.password=password
 
 *** end of db.properties file content 
 
+
+mkdir -p /usr/share/java/
+[root@ip-172-31-35-40 share]# pwd
+/usr/share
+[root@ip-172-31-35-40 share]# mkdir java
+[root@ip-172-31-35-40 share]# cd java
+[root@ip-172-31-35-40 java]# ln -s /root/mysql-connector-java-5.1.40/mysql-connector-java-5.1.40-bin.jar mysql-connector-java.jar
+
+[root@ip-172-31-35-40 share]# cd /usr/bin
+[root@ip-172-31-35-40 bin]# ln -s /usr/java/jdk1.7.0_67-cloudera/bin/java java
+
+
 *** start cloudera service
+service cloudera-scm-server start
+Starting cloudera-scm-server:                              [  OK  ]
+[root@ip-172-31-35-40 ~]# netstat -ntpl
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address               Foreign Address             State       PID/Program name   
+tcp        0      0 0.0.0.0:7180                0.0.0.0:*                   LISTEN      6361/java           
+tcp        0      0 0.0.0.0:7182                0.0.0.0:*                   LISTEN      6361/java           
 
 *** Create databases for the Activity Monitor, Reports Manager, Hive Metastore Server, Sentry Server, Cloudera Navigator Audit Server, and Cloudera Navigator Metadata Server:
 
@@ -53,6 +72,24 @@ grant all on nav.* TO 'nav'@'%' IDENTIFIED BY 'nav_password';
 create database navms DEFAULT CHARACTER SET utf8;
 grant all on navms.* TO 'navms'@'%' IDENTIFIED BY 'navms_password';
 
+mysql> show databases
+    -> ;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| amon               |
+| metastore          |
+| mysql              |
+| nav                |
+| navms              |
+| newdatabase        |
+| performance_schema |
+| rman               |
+| scm                |
+| sentry             |
++--------------------+
+11 rows in set (0.00 sec)
 
 
 
