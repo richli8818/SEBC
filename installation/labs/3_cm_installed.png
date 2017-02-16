@@ -49,9 +49,84 @@ Complete!
 cloudera                                 mysql-community-release-el5-5.noarch.rpm
 cloudera-manager-el6-cm5.8.3_x86_64.tar  mysql-connector-java-5.1.40
 cloudera-manager.repo                    mysql-connector-java-5.1.40.tar.gz
-[root@ip-172-31-35-40 ~]# cd /usr/share/cmf/schema/
-[root@ip-172-31-35-40 schema]# ls
-mysql  oracle  postgresql  scm_database_functions.sh  scm_prepare_database.sh
+
+*** modify /etc/my.cnf to the following:
+
+[root@ip-172-31-33-150 var]# cat /etc/my.cnf
+# For advice on how to change settings please see
+# http://dev.mysql.com/doc/refman/5.6/en/server-configuration-defaults.html
+
+[mysqld]
+transaction-isolation = READ-COMMITTED
+#
+bind-address = 0.0.0.0
+
+# Remove leading # and set to the amount of RAM for the most important data
+# cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.
+# innodb_buffer_pool_size = 128M
+#
+# Remove leading # to turn on a very important data integrity option: logging
+# changes to the binary log between backups.
+# log_bin
+#
+# Remove leading # to set options mainly useful for reporting servers.
+# The server defaults are faster for transactions and fast SELECTs.
+# Adjust sizes as needed, experiment to find the optimal values.
+# join_buffer_size = 128M
+# sort_buffer_size = 2M
+# read_rnd_buffer_size = 2M
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+
+# added the following for replica
+log-bin = mysql-bin
+server-id = 2
+binlog_do_db = newdatabase
+# the following is for cloudera
+binlog_format = mixed
+
+read_buffer_size = 2M
+read_rnd_buffer_size = 16M
+sort_buffer_size = 8M
+join_buffer_size = 8M
+
+# InnoDB settings
+innodb_file_per_table = 1
+innodb_flush_log_at_trx_commit  = 2
+innodb_log_buffer_size = 64M
+innodb_buffer_pool_size = 100M
+## innodb_buffer_pool_size = 4G
+innodb_thread_concurrency = 8
+innodb_flush_method = O_DIRECT
+innodb_log_file_size = 512M
+
+
+# Disabling symbolic-links is recommended to prevent assorted security risks
+#symbolic-links=0
+#for cloudera
+key_buffer_size = 32M
+max_allowed_packet = 32M
+thread_stack = 256K
+thread_cache_size = 64
+query_cache_limit = 8M
+query_cache_size = 64M
+query_cache_type = 1
+
+max_connections = 550
+#expire_logs_days = 10
+#max_binlog_size = 100M
+
+
+# Recommended in standard MySQL setup
+sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES 
+
+[mysqld_safe]
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+[root@ip-172-31-33-150 var]# 
+
+
+
 
 *** create scm database (name: scm, user=scm, password=password)
 mysql -u root -p
